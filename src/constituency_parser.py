@@ -2,6 +2,7 @@ import re
 
 from model_loader import Model
 
+import utils
 import config
 
 model_path = config.CONSTITUENCY_PARSING['local_path']
@@ -21,21 +22,14 @@ class Parser(Model):
         phrases = self.get_noun_phrases(raw_phrases)
         
         # final sanity check on phrases
-        phrases = self.sanitize_phrases(phrases)
+        phrases = utils.sanitize_phrases(phrases)
         
         # TODO: filter the phrases - remove noisy phrases
         # phrases = self.filter_phrases(phrases)
 
         return phrases
 
-    def sanitize_phrases(self, phrases):
-        for idx, phrase in enumerate(phrases):
-            phrase = re.sub('\s*\-\s*', '', phrase) # "represent- ation model" -> "representation model"
-            phrase = phrase.strip()                 # remove spaces from end 
-            phrases[idx] = phrase
-        
-        phrases = [x for x in phrases if x]         # discard empty phrases
-        return phrases
+    
     
     def get_noun_phrases(self, raw_noun_phrases):
         noun_phrases=[]
