@@ -25,6 +25,15 @@ def search_and_annotate(rect, phrases, page):
             page.addHighlightAnnot(inst, )        # highlight the found text
             # TODO: annotate based on the type/importance of phrase
 
+def sanitize_phrases(phrases):
+    for idx, phrase in enumerate(phrases):
+        phrase = re.sub('\s*\-\s*', '', phrase) # "represent- ation model" -> "representation model"
+        phrase = phrase.strip()                 # remove spaces from end 
+        phrases[idx] = phrase
+    
+    phrases = [x for x in phrases if x]         # discard empty phrases
+    return phrases
+
 def read_file(filepath):
     if filepath.startswith('https'):
         if not filepath.endswith('pdf'):
@@ -32,9 +41,8 @@ def read_file(filepath):
             paper_id = filepath.split('/')[-1]
             filepath =  f'https://arxiv.org/pdf/{paper_id}.pdf'
             
-        pdf_binary = urllib.request.urlopen(filepath).read()
-        pages = fitz.open(stream=pdf_binary, filetype='pdf')
-        
+        pdf_stream = urllib.request.urlopen(filepath).read()
+        pages = fitz.open(stream=pdf_stream, filetype='pdf')
     else:
         pages = fitz.open(filepath)
     
