@@ -1,11 +1,58 @@
+import argparse
+
+import fitz
+from tqdm import tqdm
+
 import config
 import constituency_parser
+from utils import search_and_annotate
 
-def main(sentence):
+
+def main(args, filepath):
+    # Initializing Parser
     parser = constituency_parser.Parser()
-    output = parser.parse(sentence)
-    print(output)
+    
+    # Reading input and process the pages
+    pages = fitz.open(filepath)
+    for page in tqdm(pages):
+        page_bbox = page.cropbox  # bounding box of full page
+        
+        text_blocks = page.get_text("blocks")
+        for block in text_blocks:
+            x0, y0, x1, y1, text, block_no, block_type = block
+            if block_no!=10:
+                continue
+            
+            rect = [x0, y0, x1, y1]                     
+            phrases = parser.parse(text)                
+            search_and_annotate(rect, phrases, page)
+            
+            if args['clip_abstract']:
+                # keep the area from starting of page till the end of abstract
+                page.set_cropbox(fitz.Rect([0,0,page_bbox[2],y1+20]))
+                zoom = 3    # zoom factor to increase resolution
+                mat = fitz.Matrix(zoom, zoom)
+                pix = page.getPixmap(matrix = mat)
+                pix.writeImage(config.ANNOTATED_FILEPATH+"abstract.png")
+                
+        
+        # Since we are interested only in highlighting "Abstract", we process just the "first page"
+        # TODO: Process all the pages in a research paper
+        break
+    
+    # save the annotated document
+    pages.save(config.ANNOTATED_FILEPATH+"annotated.pdf", garbage=4, deflate=True, clean=True)
+    
 
 if __name__=="__main__":
-    sentence="This study the problem of incorporating prior knowledge into a deep Transformer-based model,i.e.,Bidirectional Encoder Representations from Transformers (BERT), to enhance its performance on semantic textual matching tasks. By probing and analyzing what BERT has already known when solving this task, we obtain better understanding of what task-specific knowledge BERT needs the most and where it is most needed. The analysis further motivates us to take a different approach than most existing works. Instead of using prior knowledge to create a new training task for fine-tuning BERT, we directly inject knowledge into BERT's multi-head attention mechanism. This leads us to a simple yet effective approach that enjoys fast training stage as it saves the model from training on additional data or tasks other than the main task. Extensive experiments demonstrate that the proposed knowledge-enhanced BERT is able to consistently improve semantic textual matching performance over the original BERT model, and the performance benefit is most salient when training data is scarce"
-    main(sentence)
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('-ca', '--clip_abstract',
+                        action='store_true',
+                        default=True,
+                        help='If true, clips and saves the annotated abstract as an image file')
+
+    args = vars(parser.parse_args())
+    
+    filepath="/home/hs/Desktop/Projects/study-buddy/input/1706.03762.pdf"
+    main(args, filepath)

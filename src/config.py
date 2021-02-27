@@ -8,3 +8,6 @@ OPENIE = {
     'web_path': "https://s3-us-west-2.amazonaws.com/allennlp/models/openie-model.2018-08-20.tar.gz",
     'local_path': '../pretrained_weights/openie-model.2018-08-20.tar.gz'
 }
+
+# location to store annotated PDF
+ANNOTATED_FILEPATH = '../output/'
