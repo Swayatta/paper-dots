@@ -1,5 +1,7 @@
 from IPython.core.display import display, HTML
 import re
+import fitz
+import urllib.request, urllib.parse, urllib.error
 
 def render(cleaned_spans, tok_tags, colour='yellow', debug=False):
     html_string_components = []
@@ -22,3 +24,18 @@ def search_and_annotate(rect, phrases, page):
         for inst in text_instances:
             page.addHighlightAnnot(inst, )        # highlight the found text
             # TODO: annotate based on the type/importance of phrase
+
+def read_file(filepath):
+    if filepath.startswith('https'):
+        if not filepath.endswith('pdf'):
+            # if not a pdf link, process and convert the url to point to pdf url
+            paper_id = filepath.split('/')[-1]
+            filepath =  f'https://arxiv.org/pdf/{paper_id}.pdf'
+            
+        pdf_binary = urllib.request.urlopen(filepath).read()
+        pages = fitz.open(stream=pdf_binary, filetype='pdf')
+        
+    else:
+        pages = fitz.open(filepath)
+    
+    return pages
