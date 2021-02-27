@@ -5,15 +5,15 @@ from tqdm import tqdm
 
 import config
 import constituency_parser
-from utils import search_and_annotate
+from utils import search_and_annotate, read_file
 
 
-def main(args, filepath):
+def main(args):
     # Initializing Parser
     parser = constituency_parser.Parser()
     
     # Reading input and process the pages
-    pages = fitz.open(filepath)
+    pages = read_file(args['filepath'])
     for page in tqdm(pages):
         page_bbox = page.cropbox  # bounding box of full page
         
@@ -46,6 +46,11 @@ def main(args, filepath):
 
 if __name__=="__main__":
     parser = argparse.ArgumentParser()
+    
+    parser.add_argument('-fp', '--filepath',
+                        type=str,
+                        required=True,
+                        help="Filepath - can be path on local disk or a URL")
 
     parser.add_argument('-ca', '--clip_abstract',
                         action='store_true',
@@ -54,5 +59,4 @@ if __name__=="__main__":
 
     args = vars(parser.parse_args())
     
-    filepath="/home/hs/Desktop/Projects/study-buddy/input/1706.03762.pdf"
-    main(args, filepath)
+    main(args)
