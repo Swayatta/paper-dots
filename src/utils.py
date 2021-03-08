@@ -2,6 +2,7 @@ from IPython.core.display import display, HTML
 import re
 import fitz
 import urllib.request, urllib.parse, urllib.error
+import config
 
 def render(cleaned_spans, tok_tags, colour='yellow', debug=False):
     html_string_components = []
@@ -18,12 +19,30 @@ def render(cleaned_spans, tok_tags, colour='yellow', debug=False):
     html_to_render = '<p> '+' '.join(html_string_components) + ' </p>'
     display(HTML(html_to_render))
 
-def search_and_annotate(rect, phrases, page):
+def search_and_annotate(phrases, page, text_type, clip=None, max_inst=None):
+    """Searches and annotates the found object
+
+    Args:
+        phrases (List): [description]
+        page ([type]): [description]
+        clip (List of coordinates, optional): The area within which to search text. Defaults to None.
+        max_inst (int, optional): Number of found instances to highlight. Defaults to None.
+    """
+    # update annotation according to text_type
+    # (page.addHighlightAnnot()).setColors(config.ANNOT_COLOURS[text_type])
     for phrase in phrases:
-        text_instances = page.searchFor(phrase)   # TODO: Use clip parameter to bring down noise
+        text_instances = page.searchFor(phrase)
+        if not text_instances:
+            continue
+        text_instances = text_instances[:max_inst] if max_inst else text_instances
         for inst in text_instances:
-            page.addHighlightAnnot(inst, )        # highlight the found text
+            if clip and (inst[0]<clip[0] or inst[1]<clip[1] or inst[2]>clip[2] or inst[3]>clip[3]):
+                continue
+            highlight=page.addHighlightAnnot(inst)        # highlight the found text
+            
             # TODO: annotate based on the type/importance of phrase
+            highlight.setColors(config.ANNOT_COLOURS[text_type])
+            highlight.update()
 
 def sanitize_phrases(phrases):
     for idx, phrase in enumerate(phrases):
@@ -47,3 +66,14 @@ def read_file(filepath):
         pages = fitz.open(filepath)
     
     return pages
+
+def get_block_containing_abstract(text_blocks):
+    '''Finds the text block that contains the abstract'''
+    for block in text_blocks:
+        x0, y0, x1, y1, text, block_no, block_type = block
+        text = text.strip().lower()
+        if re.search('abstract', text.strip().lower()):
+            if text.endswith('abstract'): 
+                return text_blocks[block_no+1]
+            else:
+                return text_blocks[block_no]
