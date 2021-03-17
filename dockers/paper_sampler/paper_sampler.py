@@ -1,6 +1,8 @@
 import pandas as pd
 import h5py
 from sentence_transformers import SentenceTransformer, util
+import re
+import pickle
 
 
 class Sample():
@@ -12,27 +14,48 @@ class Sample():
         data=h5py.File('./data/corpus_embeddings.hdf5', 'r')
         self.corpus_embeddings=data['corpus_embeddings'][()]
         
+        # Reading corpus ids
+        self.corpus_ids = pickle.load(open('./data/corpus_ids.pkl','rb'))
+        
+        assert len(self.corpus_embeddings)==len(self.corpus_ids), '# of corpus ids != # of corpus embeddings'
+        
         # Loading model to encode input text
         self.model = SentenceTransformer('allenai-specter')
+    
+    def clean_text(self, text):
+        text=re.sub('\n', ' ', text)
+        text=re.sub(r'\s+', ' ', text)
+        return text
 
-    def sample(self, paper_text):
-        """Given paper_text( = paper_abstract+paper_title), samples out the most relevant paper
+    def sample(self, paper_id, abstract, title):
+        """Given paper_text ( = paper_abstract+paper_title), samples out the most relevant paper
 
         Args:
-            paper_text (str): concatenated string of paper_title & paper_abstract
+            abstract (str): abstract of paper
+            title (str)   : title of paper
 
         Returns:
             [type]: [description]
         """
+        paper_text = abstract + ' ' + title
+        paper_text = self.clean_text(paper_text)
+        
         query_embedding = self.model.encode(paper_text, convert_to_tensor=True)
 
-        search_hits = util.semantic_search(query_embedding, self.corpus_embeddings)
-        return search_hits[0]
+        search_hits = util.semantic_search(query_embedding, self.corpus_embeddings)[0]
+        next_paper_id = self.corpus_ids[search_hits[0]['corpus_id']]
+        
+        if next_paper_id == paper_id:
+            next_paper_id = self.corpus_ids[search_hits[1]['corpus_id']]
+        
+        return str(next_paper_id)
         
 
 
 if __name__=='__main__':
-    paper_text = '''A fully differential calculation in perturbative quantum chromodynamics is presented for 
+    paper_id = '0704.0001'
+    title = "Calculation of prompt diphoton production cross sections at Tevatron and LHC energies"
+    abstract = '''A fully differential calculation in perturbative quantum chromodynamics is presented for 
                 the production of massive photon pairs at hadron colliders. All next-to-leading order perturbative 
                 contributions from quark-antiquark, gluon-(anti)quark, and gluon-gluon subprocesses are included, 
                 as well as all-orders resummation of initial-state gluon radiation valid at next-to-next-to-leading 
@@ -41,9 +64,8 @@ if __name__=='__main__':
                 detailed tests with CDF and DO data. Predictions are shown for distributions of diphoton pairs produced 
                 at the energy of the Large Hadron Collider (LHC). Distributions of the diphoton pairs from the decay of
                 a Higgs boson are contrasted with those produced from QCD processes at the LHC, showing that enhanced 
-                sensitivity to the signal can be obtained with judicious selection of events. Calculation of prompt 
-                diphoton production cross sections at Tevatron and LHC energies'''
+                sensitivity to the signal can be obtained with judicious selection of events.'''
     
     sample = Sample()
-    result = sample.sample(paper_text)
+    result = sample.sample(paper_id, abstract, title)
     print(result)
