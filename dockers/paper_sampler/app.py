@@ -15,7 +15,7 @@ def index_page():
 def get_next_paper():
     paper_id = request.args.get('paper_id')
     title, abstract = get_paper_data(paper_id)
-    next_paper_id = sample.sample(title, abstract)
+    next_paper_id = sample.sample(paper_id, title, abstract)
     return next_paper_id
 
 @flask_app.route('/encode',methods=['GET'])
