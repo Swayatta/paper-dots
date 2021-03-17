@@ -4,7 +4,10 @@
 ![GitHub issues](https://img.shields.io/github/issues/harshit158/paper-insights)
 ![Codecov](https://img.shields.io/codecov/c/github/harshit158/paper-insights)
 
-# Project : Paper Insights  
+# Project : Paper Dots
+
+An image showing the overall pipeline
+![alt text](docs/pipeline.png 'paper-walk')  
 
 # Motivation
 
