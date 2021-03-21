@@ -7,7 +7,9 @@
 # Paper Dots
 ## Dots worth connecting
 
-![alt text](docs/pipeline.png 'paper-walk')  
+![alt text](docs/pipeline.png 'paper-walk')
+
+![alt text](docs/paper-sampling.png 'paper-sampling')
 
 # Motivation
 
