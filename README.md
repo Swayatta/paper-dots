@@ -4,7 +4,9 @@
 ![GitHub issues](https://img.shields.io/github/issues/harshit158/paper-insights)
 ![Codecov](https://img.shields.io/codecov/c/github/harshit158/paper-insights)
 
-# Paper Dots
+<p align="left">
+  <img  src="docs/logo3.png">
+</p>
 ## Dots worth connecting
 
 <p align="center">
@@ -18,6 +20,7 @@
 # Motivation
 
 # Approach
+The project currently supports 
 
 # Installation
 
