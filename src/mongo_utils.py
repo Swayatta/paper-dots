@@ -1,8 +1,13 @@
+import os
 from pymongo import MongoClient
+from dotenv import load_dotenv; load_dotenv()
+
+# Loading environment variables
+CONNECTION_STRING = os.getenv('CONNECTION_STRING')
 
 class MongoUtils():
     def __init__(self, db):
-        client = MongoClient("mongodb://harshit158:Hs%40123021@cluster0-shard-00-00-iyydw.mongodb.net:27017,cluster0-shard-00-01-iyydw.mongodb.net:27017,cluster0-shard-00-02-iyydw.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority")
+        client = MongoClient(CONNECTION_STRING)
         self.db = client[db]
 
     def push(self, coll, doc):
