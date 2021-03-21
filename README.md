@@ -4,9 +4,9 @@
 ![GitHub issues](https://img.shields.io/github/issues/harshit158/paper-insights)
 ![Codecov](https://img.shields.io/codecov/c/github/harshit158/paper-insights)
 
-# Project : Paper Dots
+# Paper Dots
+## Dots worth connecting
 
-An image showing the overall pipeline
 ![alt text](docs/pipeline.png 'paper-walk')  
 
 # Motivation
