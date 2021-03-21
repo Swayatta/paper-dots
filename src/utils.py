@@ -2,7 +2,11 @@ from IPython.core.display import display, HTML
 import re
 import fitz
 import urllib.request, urllib.parse, urllib.error
+import requests
+from requests.models import Response
 import config
+import pytz
+from datetime import datetime
 
 def render(cleaned_spans, tok_tags, colour='yellow', debug=False):
     html_string_components = []
@@ -53,12 +57,16 @@ def sanitize_phrases(phrases):
     phrases = [x for x in phrases if x]         # discard empty phrases
     return phrases
 
+def compose_paper_url(paper_id):
+    filepath =  f'https://arxiv.org/pdf/{paper_id}.pdf'
+    return filepath
+
 def read_file(filepath):
     if filepath.startswith('https'):
         if not filepath.endswith('pdf'):
             # if not a pdf link, process and convert the url to point to pdf url
             paper_id = filepath.split('/')[-1]
-            filepath =  f'https://arxiv.org/pdf/{paper_id}.pdf'
+            filepath = compose_paper_url(paper_id)
             
         pdf_stream = urllib.request.urlopen(filepath).read()
         pages = fitz.open(stream=pdf_stream, filetype='pdf')
@@ -77,3 +85,25 @@ def get_block_containing_abstract(text_blocks):
                 return text_blocks[block_no+1]
             else:
                 return text_blocks[block_no]
+
+
+def get_current_time(tz='America/New_York'):
+    """Returns time zone
+
+    Args:
+        tz (str, optional): . Defaults to 'America/New_York'.
+
+    Returns:
+        str : Current time as per the time zone
+    """
+    tz=pytz.timezone(tz)
+    dt=datetime.now(tz)
+    return dt.isoformat()
+
+def sample_next_paper(paper_id):
+    URL = "http://localhost:8080/nextpaper"
+    PARAMS = {'paper_id':paper_id} 
+    response = requests.get(url = URL, params = PARAMS)
+    result = response.content
+    result = result.decode() # converting bytes to string
+    return result
