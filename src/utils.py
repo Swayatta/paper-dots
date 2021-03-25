@@ -1,5 +1,6 @@
 from IPython.core.display import display, HTML
 import re
+import io
 import fitz
 import urllib.request, urllib.parse, urllib.error
 import requests
@@ -107,3 +108,9 @@ def sample_next_paper(paper_id):
     result = response.content
     result = result.decode() # converting bytes to string
     return result
+
+def get_binary_img(image):
+    imgByteArr = io.BytesIO()
+    image.save(imgByteArr, format='JPEG')
+    imgByteArr = imgByteArr.getvalue()
+    return imgByteArr
