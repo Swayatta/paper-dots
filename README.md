@@ -30,25 +30,29 @@ The end-to-end pipeline is shown below:
   <img  src="docs/pipeline.png">
 </p>
 
-# Approach
+## Approach
 There are 3 main components to the project:
 * **Keyphrase Extraction**
 * **Knowledge Graph construction**
 * **Paper sampling**
+
+The papers are sampled from [Arxiv corpus](https://www.kaggle.com/Cornell-University/arxiv) (hosted on Kaggle). To enable semantic search over the papers, we had to first obtain the embeddings for each of the papers in the corpus, for which we used [Sentence-Transformers](https://github.com/UKPLab/sentence-transformers).  
+The corpus embeddings are available and can be downloaded from [here](https://drive.google.com/file/d/1EDdcti5J0y4L1jvuiEdpKAHDkGfJf7LT/view?usp=sharing) for research purposes.  
+Once the corpus embeddings are in place, a new paper can be sampled from the corpus using the seed paper as follows:  
 
 
 <p align="center">
   <img  src="docs/paper-sampling.png">
 </p>
 
-# How to use ?
+## How to use ?
 Currently, the end-to-end pipeline is not open for public use (coming very soon) but individual components can be used as follows:
 
-# How to contribute ?
+## How to contribute ?
 Feel free to raise requests for new features :)
 
-# Contact
+## Contact
 
-# References
+## References
 
-# License
+## License
