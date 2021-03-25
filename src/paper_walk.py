@@ -17,7 +17,8 @@ log = logging.getLogger(__name__)
 import information_extraction
 from mongo_utils import MongoUtils
 from dotenv import load_dotenv; load_dotenv()
-from utils import get_current_time, sample_next_paper, compose_paper_url
+from mail_sender import send_mail
+from utils import get_current_time, sample_next_paper, compose_paper_url, get_binary_img
 
 # Loading environment variables
 USER_EMAIL = os.getenv('USER_EMAIL')
@@ -37,14 +38,16 @@ def walk():
     # 2. Run analysis on paper_to_read (last record from db)
     paper_url = compose_paper_url(paper_id)
     print(paper_url)
-    abstract_img = information_extraction.main({"filepath":paper_url, 
+    deliverables = information_extraction.main({"filepath":paper_url, 
                                                 "ke":True, 
                                                 "showke":True,
                                                 "clip_abstract":True})
     print('Analysis done')
     
     # 3. Deliver mail containing analysis results
-    
+    img = deliverables['ke']
+    img_binary = get_binary_img(img)
+    send_mail('harshit158@gmail.com', book_image=img_binary)
     
     # 4. Sample next paper
     next_paper_id = sample_next_paper(paper_id)
