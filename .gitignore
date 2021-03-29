@@ -130,3 +130,5 @@ dmypy.json
 
 # custom
 /pretrained_weights/*
+*.hdf5
+*.pkl
