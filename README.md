@@ -6,14 +6,14 @@
 
 <p align="center">
   <br>
-    <a href="https://travis-ci.com/harshit158/paper-insights">
+    <a href="https://travis-ci.com/harshit158/paper-dots">
         <img alt="Build" src="https://travis-ci.com/harshit158/paper-insights.svg?branch=main">
     </a>
-    <a href="https://img.shields.io/github/issues/harshit158/paper-insights">
-        <img alt="Issues" src="https://img.shields.io/github/issues/harshit158/paper-insights">
+    <a href="https://img.shields.io/github/issues/harshit158/paper-dots">
+        <img alt="Issues" src="https://img.shields.io/github/issues/harshit158/paper-dots">
     </a>
-    <a href="https://img.shields.io/github/license/harshit158/paper-insights">
-        <img alt="License" src="https://img.shields.io/github/license/harshit158/paper-insights">
+    <a href="https://img.shields.io/github/license/harshit158/paper-dots">
+        <img alt="License" src="https://img.shields.io/github/license/harshit158/paper-dots">
     </a>
   </br>
 </p>
