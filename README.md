@@ -42,7 +42,7 @@ Coming Soon:
   <img  src="docs/annotated.png" width=600>
 </p>
 
-* **Knowledge Graph construction**
+* **Knowledge Graph construction**  
 Implemented using Open Information Extraction (OPENIE pretrained model from AllenNLP). Extracted SVO triplets followed by refining, to generate the final nodes and edges for the knowledge graph.
 
 <p align="center">
