@@ -7,7 +7,7 @@
 <p align="center">
   <br>
     <a href="https://travis-ci.com/harshit158/paper-dots">
-        <img alt="Build" src="https://travis-ci.com/harshit158/paper-insights.svg?branch=main">
+        <img alt="Build" src="https://travis-ci.com/harshit158/paper-dots.svg?branch=main">
     </a>
     <a href="https://img.shields.io/github/issues/harshit158/paper-dots">
         <img alt="Issues" src="https://img.shields.io/github/issues/harshit158/paper-dots">
@@ -32,12 +32,19 @@ The end-to-end pipeline is shown below:
 
 ## Approach
 There are 3 main components to the project:
-* **Keyphrase Extraction**
+* **Keyphrase Extraction**  
+Implemented using Constituency Parsing (using AllenNLP pretrained model) followed by a rule based engine to refine the extracted keyphrases  
+Coming Soon:
+* Keyphrase extraction from entire paper and not just the abstract
+* Further division of identified keyphrases into domain specific entities like Datasets, References, Algorithms, Metrics etc
+
 <p align="center">
   <img  src="docs/annotated.png" width=600>
 </p>
 
 * **Knowledge Graph construction**
+Implemented using Open Information Extraction (OPENIE pretrained model from AllenNLP). Extracted SVO triplets followed by refining, to generate the final nodes and edges for the knowledge graph.
+
 <p align="center">
   <img  src="docs/knowledge_graph_demo.gif">
 </p>
