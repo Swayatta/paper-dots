@@ -33,7 +33,15 @@ The end-to-end pipeline is shown below:
 ## Approach
 There are 3 main components to the project:
 * **Keyphrase Extraction**
+<p align="center">
+  <img  src="docs/annotated.png" width=600>
+</p>
+
 * **Knowledge Graph construction**
+<p align="center">
+  <img  src="docs/knowledge_graph_demo.gif">
+</p>
+
 * **Paper sampling**
 
 The papers are sampled from [Arxiv corpus](https://www.kaggle.com/Cornell-University/arxiv) (hosted on Kaggle). To enable semantic search over the papers, we had to first obtain the embeddings for each of the papers in the corpus, for which we used [Sentence-Transformers](https://github.com/UKPLab/sentence-transformers).  
@@ -84,6 +92,28 @@ Once the corpus embeddings are in place, a new paper can be sampled from the cor
 ## How to use ?
 Currently, the end-to-end pipeline is only configured for personal use, but we are working on it to make it available for public.
 However, you can send a mail to **paperdotsai@gmail.com** with the link of your seed paper, and we will onboard you in the next iteration.
+
+The individual tasks of the Information Extraction sub-pipeline, however, can be used as follows:
+
+**Keyphrase Extraction**:  
+```
+python task_keyphrase_extraction.py -fp https://arxiv.org/abs/1706.03762
+```
+All the options are as follows:
+```
+-fp [--filepath]:       This is the path to the research paper. Can be URL (both abs and pdf links are supported) or local path
+-ca [--clip_abstract]:  If true, clips the annotated abstract as an image file and doesnt do the annotation of entire PDF
+-sa [--save_abstract]:  If true, saves the annotated image at ANNOTATE_FILEPATH in config
+```
+
+**Knowledge Graph**:  
+```
+python task_knowledge_graph.py -fp https://arxiv.org/abs/1706.03762
+```
+All the options are as follows:
+```
+-fp [--filepath]:       This is the path to the research paper. Can be URL (both abs and pdf links are supported) or local path
+```
 
 ## How to contribute ?
 Feel free to raise requests for new features :)

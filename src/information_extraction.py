@@ -9,7 +9,7 @@ def main(args):
     if not args.get('kg') and not args.get('ke'):
         print('None tasks selected')
     
-    deliverables = []
+    deliverables = {}
     
     # Task: Build Knowledge Graph
     if args.get('kg'):
@@ -22,7 +22,7 @@ def main(args):
         
         if args.get('showke'):
             abstract_img.show()
-        deliverables.append(abstract_img)
+        deliverables['ke']=abstract_img
         
     return deliverables
     
