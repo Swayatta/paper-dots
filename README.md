@@ -120,7 +120,3 @@ Feel free to raise requests for new features :)
 
 ## Contact
 **paperdotsai@gmail.com**
-
-## References
-
-## License
